@@ -61,6 +61,22 @@ router.post("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 }));
 router.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("Get all users");
+    try {
+        const { email, phone } = req.query;
+        console.log(email, phone);
+        if (!email && !phone) {
+            return res.status(400).json({ error: "Email or phone is required" });
+        }
+        if (email) {
+            return res.status(200).json(yield User_1.default.find({ email: email }));
+        }
+        else if (phone) {
+            return res.status(200).json(yield User_1.default.find({ phone: phone }));
+        }
+    }
+    catch (error) {
+        console.error("Error finding user: ", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
 }));
 exports.default = router;
