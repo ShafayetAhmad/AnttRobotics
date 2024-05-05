@@ -45,7 +45,7 @@ router.post("/users", async (req: Request, res: Response) => {
 
     const newUser: IUser = req.body;
     const createdUser = await User.create(newUser);
-
+    console.log("User created: ", createdUser);
     return res.status(201).json(createdUser);
   } catch (error) {
     console.log("Error creating user: ", error);
@@ -61,11 +61,15 @@ router.get("/users", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Email or phone is required" });
     }
 
+    let user;
+
     if (email) {
-      return res.status(200).json(await User.find({ email: email as string }));
+      user = await User.find({ email: email as string });
     } else if (phone) {
-      return res.status(200).json(await User.find({ phone: phone as string }));
+      user = await User.find({ phone: phone as string });
     }
+    console.log("user found:", user);
+    return res.status(200).json(user);
   } catch (error) {
     console.error("Error finding user: ", error);
     return res.status(500).json({ error: "Internal Server Error" });

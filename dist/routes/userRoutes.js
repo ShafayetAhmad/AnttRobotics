@@ -67,12 +67,14 @@ router.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         if (!email && !phone) {
             return res.status(400).json({ error: "Email or phone is required" });
         }
+        let user;
         if (email) {
-            return res.status(200).json(yield User_1.default.find({ email: email }));
+            user = yield User_1.default.find({ email: email });
         }
         else if (phone) {
-            return res.status(200).json(yield User_1.default.find({ phone: phone }));
+            user = yield User_1.default.find({ phone: phone });
         }
+        return res.status(200).json(user);
     }
     catch (error) {
         console.error("Error finding user: ", error);
