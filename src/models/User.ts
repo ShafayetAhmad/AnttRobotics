@@ -1,4 +1,5 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import mongooseUniqueValidator from "mongoose-unique-validator";
 
 type TRole =
   // root user
@@ -13,7 +14,7 @@ type TRole =
   | "serviceProviderBranchManager"
   | "serviceProviderSupportStuff";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   uid: string;
   email: string;
   role: TRole;
@@ -81,3 +82,7 @@ const userSchema = new Schema<IUser>(
   },
   { timestamps: true }
 );
+
+userSchema.plugin(mongooseUniqueValidator);
+
+export default mongoose.model<IUser>("User", userSchema);
